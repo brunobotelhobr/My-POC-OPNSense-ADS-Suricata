@@ -32,12 +32,8 @@ alert tcp any ![21,22,23,25,53,80,88,110,135,137,138,139,143,161,389,443,445,465
 # UDP destination port: 4444
 alert udp any ![53,67,68,69,123,161,162,389,520,1026,1027,1028,1029,1194,1434,1900,11211,12345,27017,51820] -> any 4444 (msg:"POSSBL SCAN SHELL M-SPLOIT UDP"; classtype:trojan-activity; sid:3400021; priority:1; rev:2;)
 
-
-
 # SQLMAP DETECTION RULES
-alert http $EXTERNAL_NET any -> $HTTP_SERVERS any (msg:"ET SCAN Sqlmap SQL Injection Scan"; flow:to_server,established; content:"sqlmap"; depth:6; http_user_agent; threshold: type limit, count 2, seconds 40, track by_src; reference:url,sqlmap.sourceforge.net; reference:url,doc.emergingthreats.net/2008538; classtype:attempted-recon; sid:2008538; rev:7; metadata:affected_product Web_Server_Applications, attack_target Web_Server, deployment Datacenter, tag SQL_Injection, signature_severity Major, created_at 2010_07_30, updated_at 2016_07_01;)
-
-
+alert http any any -> any any (msg:"ET SCAN Sqlmap SQL Injection Scan"; flow:to_server,established; content:"sqlmap"; depth:6; http_user_agent; threshold: type limit, count 2, seconds 40, track by_src; reference:url,sqlmap.sourceforge.net; reference:url,doc.emergingthreats.net/2008538; classtype:attempted-recon; sid:2008538; rev:7; metadata:affected_product Web_Server_Applications, attack_target Web_Server, deployment Datacenter, tag SQL_Injection, signature_severity Major, created_at 2010_07_30, updated_at 2016_07_01;)
 
 # FTP BRUTE FORCE DETECTION RULES
-alert tcp $EXTERNAL_NET any -> $HOME_NET 21 (msg:"ET SCAN FTP Brute-Force Attempt"; flow:to_server,established; content:"530"; depth:3; reference:url,doc.emergingthreats.net/2001210; classtype:attempted-admin; sid:2001210; rev:9;)
+alert tcp any any -> any 21 (msg:"ET SCAN FTP Brute-Force Attempt"; flow:to_server,established; content:"530"; depth:3; reference:url,doc.emergingthreats.net/2001210; classtype:attempted-admin; sid:2001210; rev:9;)
